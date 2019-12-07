@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Products",
+        "path": "api/v1/menu/products"
+    },
+    {
+        "name": "Categories",
+        "path": "api/v1/menu/categories"
+    }
+]

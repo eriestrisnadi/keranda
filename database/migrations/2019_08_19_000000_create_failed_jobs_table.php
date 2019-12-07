@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Rorecek\Ulid;
 
 class CreateFailedJobsTable extends Migration
 {
@@ -14,7 +15,7 @@ class CreateFailedJobsTable extends Migration
     public function up()
     {
         Schema::create('failed_jobs', function (Blueprint $t) {
-            $t->char('id', 26)->primary();
+            $t->char('id', 26)->primary()->default(\Ulid::generate());
             $t->text('connection');
             $t->text('queue');
             $t->longText('payload');

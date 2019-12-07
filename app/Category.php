@@ -9,6 +9,8 @@ use App\Product;
 class Category extends Model
 {
     use HasUlid;
+
+    protected $fillable = ['name'];
     
     public function products()
     {
