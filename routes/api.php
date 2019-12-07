@@ -25,7 +25,6 @@ Route::group(['prefix' => 'v1'], function()
     {
         Route::get('/', [
             'as' => 'api.categories.fetch',
-            'middleware' => 'auth:api',
             'uses' => 'CategoryController@fetch',
         ]);
         Route::post('/', [
@@ -45,7 +44,7 @@ Route::group(['prefix' => 'v1'], function()
         ]);
     });
 
-    
+
     // Products
     Route::group(['prefix' => 'products'], function()
     {
@@ -58,7 +57,7 @@ Route::group(['prefix' => 'v1'], function()
             'middleware' => 'auth:api',
             'uses' => 'ProductController@store',
         ]);
-        Route::put('/{id}', [
+        Route::post('/{id}', [
             'as' => 'api.products.update',
             'middleware' => 'auth:api',
             'uses' => 'ProductController@update',

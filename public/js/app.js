@@ -414,12 +414,12 @@ function _objectWithoutPropertiesLoose(source, excluded) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _possibleConstructorReturn; });
-/* harmony import */ var _helpers_esm_typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../helpers/esm/typeof.js */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
+/* harmony import */ var _helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../helpers/esm/typeof */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
 /* harmony import */ var _assertThisInitialized__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./assertThisInitialized */ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js");
 
 
 function _possibleConstructorReturn(self, call) {
-  if (call && (Object(_helpers_esm_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(call) === "object" || typeof call === "function")) {
+  if (call && (Object(_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_0__["default"])(call) === "object" || typeof call === "function")) {
     return call;
   }
 
@@ -505,14 +505,16 @@ function _toConsumableArray(arr) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _typeof; });
+function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
+
 function _typeof(obj) {
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
     _typeof = function _typeof(obj) {
-      return typeof obj;
+      return _typeof2(obj);
     };
   } else {
     _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
     };
   }
 
@@ -3940,7 +3942,7 @@ module.exports = function spread(callback) {
 
 
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
-var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/axios/node_modules/is-buffer/index.js");
+var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/is-buffer/index.js");
 
 /*global toString:true*/
 
@@ -4271,28 +4273,6 @@ module.exports = {
   extend: extend,
   trim: trim
 };
-
-
-/***/ }),
-
-/***/ "./node_modules/axios/node_modules/is-buffer/index.js":
-/*!************************************************************!*\
-  !*** ./node_modules/axios/node_modules/is-buffer/index.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/*!
- * Determine if an object is a Buffer
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-
-module.exports = function isBuffer (obj) {
-  return obj != null && obj.constructor != null &&
-    typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
-}
 
 
 /***/ }),
@@ -8824,6 +8804,28 @@ module.exports = function isBuffer (obj) {
 
 })));
 //# sourceMappingURL=bootstrap.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/is-buffer/index.js":
+/*!*****************************************!*\
+  !*** ./node_modules/is-buffer/index.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+module.exports = function isBuffer (obj) {
+  return obj != null && obj.constructor != null &&
+    typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+}
 
 
 /***/ }),
@@ -77456,6 +77458,16 @@ function (_Component) {
       })["catch"](console.log);
     }
   }, {
+    key: "resetFormData",
+    value: function resetFormData() {
+      this.setState({
+        formData: {
+          name: ''
+        },
+        editId: null
+      });
+    }
+  }, {
     key: "onFormChange",
     value: function onFormChange(e) {
       this.setState({
@@ -77475,11 +77487,7 @@ function (_Component) {
         if (success) {
           _this3.fetchData();
 
-          _this3.setState({
-            formData: {
-              name: ''
-            }
-          });
+          _this3.resetFormData();
 
           _this3.closeRef.current.click();
         }
@@ -77500,12 +77508,7 @@ function (_Component) {
         if (success) {
           _this4.fetchData();
 
-          _this4.setState({
-            formData: {
-              name: ''
-            },
-            editId: null
-          });
+          _this4.resetFormData();
 
           _this4.closeEditRef.current.click();
         }
@@ -77556,6 +77559,9 @@ function (_Component) {
       }, "Categories")), addNew && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-6 text-right"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: function onClick(e) {
+          return _this6.resetFormData();
+        },
         className: "btn btn-sm btn-primary",
         type: "button",
         "data-toggle": "modal",
@@ -77576,13 +77582,17 @@ function (_Component) {
           "data-toggle": "modal",
           "data-target": "#editCategory",
           onClick: function onClick(e) {
-            return _this6.onChangeEditData(d);
+            e.preventDefault();
+
+            _this6.onChangeEditData(d);
           }
         }, "Edit"), "\xA0|\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
           href: "#",
           className: "text-danger",
           onClick: function onClick(e) {
-            return _this6.onDelete(d.id);
+            e.preventDefault();
+
+            _this6.onDelete(d.id);
           }
         }, "Delete")))));
       })), addNew && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -77681,6 +77691,110 @@ Categories.defaultProps = {
   addNew: false
 };
 /* harmony default export */ __webpack_exports__["default"] = (Categories);
+
+/***/ }),
+
+/***/ "./resources/js/components/CategoryField.js":
+/*!**************************************************!*\
+  !*** ./resources/js/components/CategoryField.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.browser.esm.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+var CategoryField =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(CategoryField, _Component);
+
+  function CategoryField(props) {
+    _classCallCheck(this, CategoryField);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(CategoryField).call(this, props));
+  }
+
+  _createClass(CategoryField, [{
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      var _this$props = this.props,
+          data = _this$props.data,
+          categories = _this$props.categories;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_select__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        isMulti: true,
+        id: "categories",
+        name: "categories",
+        options: categories,
+        value: categories && data.map(function (id) {
+          var category = categories.find(function (cat) {
+            return cat.value === id;
+          });
+          return {
+            label: category.label,
+            value: id
+          };
+        }),
+        onChange: function onChange(cat) {
+          return cat && _this.props.onChange({
+            target: {
+              name: 'categories',
+              value: cat.map(function (c) {
+                return c.value;
+              })
+            }
+          });
+        },
+        className: "basic-multi-select text-dark",
+        classNamePrefix: "select"
+      });
+    }
+  }]);
+
+  return CategoryField;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+CategoryField.propTypes = {
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func,
+  data: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.array,
+  categories: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.array
+};
+CategoryField.defaultProps = {
+  onChange: function onChange() {
+    return false;
+  },
+  data: [],
+  categories: []
+};
+/* harmony default export */ __webpack_exports__["default"] = (CategoryField);
 
 /***/ }),
 
@@ -77888,8 +78002,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.browser.esm.js");
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../api */ "./resources/js/api.js");
+/* harmony import */ var _CategoryField__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CategoryField */ "./resources/js/components/CategoryField.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -77912,53 +78025,23 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-
 var ProductForm =
 /*#__PURE__*/
 function (_Component) {
   _inherits(ProductForm, _Component);
 
   function ProductForm(props) {
-    var _this;
-
     _classCallCheck(this, ProductForm);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ProductForm).call(this, props));
-    _this.state = {
-      categories: []
-    };
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(ProductForm).call(this, props));
   }
 
   _createClass(ProductForm, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      _api__WEBPACK_IMPORTED_MODULE_3__["default"].get('categories').then(function (res) {
-        var _res$data = res.data,
-            success = _res$data.success,
-            data = _res$data.data;
-
-        if (success) {
-          _this2.setState({
-            categories: data.map(function (c) {
-              return {
-                label: c.name,
-                value: c.id
-              };
-            })
-          });
-        }
-      });
-    }
-  }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
-
-      var categories = this.state.categories;
-      var formData = this.props.formData;
+      var _this$props = this.props,
+          formData = _this$props.formData,
+          categories = _this$props.categories;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
@@ -77975,32 +78058,10 @@ function (_Component) {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "categories"
-      }, "Select Some Categories"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_select__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        isMulti: true,
-        id: "categories",
-        name: "categories",
-        options: categories,
-        value: categories && formData.categories.map(function (id) {
-          var category = categories.find(function (cat) {
-            return cat.value === id;
-          });
-          return {
-            label: category.label,
-            value: id
-          };
-        }),
-        onChange: function onChange(cat) {
-          return cat && _this3.props.onChange({
-            target: {
-              name: 'categories',
-              value: cat.map(function (c) {
-                return c.value;
-              })
-            }
-          });
-        },
-        className: "basic-multi-select text-dark",
-        classNamePrefix: "select"
+      }, "Select Some Categories"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CategoryField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        onChange: this.props.onChange,
+        data: formData.categories,
+        categories: categories
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
@@ -78013,6 +78074,16 @@ function (_Component) {
         placeholder: "Describe something of your product ...",
         onChange: this.props.onChange,
         value: formData.description
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "description"
+      }, "File"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "file",
+        name: "file",
+        className: "form-control",
+        id: "file",
+        onChange: this.props.onFileChange
       })));
     }
   }]);
@@ -78021,12 +78092,18 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 ProductForm.propTypes = {
-  onChange: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func,
+  onFileChange: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func,
+  categories: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.array
 };
 ProductForm.defaultProps = {
   onChange: function onChange() {
     return false;
-  }
+  },
+  onFileChange: function onFileChange() {
+    return false;
+  },
+  categories: []
 };
 /* harmony default export */ __webpack_exports__["default"] = (ProductForm);
 
@@ -78048,7 +78125,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _ProductForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ProductForm */ "./resources/js/components/ProductForm.js");
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../api */ "./resources/js/api.js");
+/* harmony import */ var _CategoryField__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CategoryField */ "./resources/js/components/CategoryField.js");
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../api */ "./resources/js/api.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -78079,6 +78157,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var Products =
 /*#__PURE__*/
 function (_Component) {
@@ -78094,12 +78173,19 @@ function (_Component) {
       formData: {
         name: '',
         description: '',
+        file: null,
         categories: []
       },
       data: [],
-      editId: null
+      editId: null,
+      categories: [],
+      filterData: {
+        categories: []
+      }
     };
     _this.onFormChange = _this.onFormChange.bind(_assertThisInitialized(_this));
+    _this.onFilterChange = _this.onFilterChange.bind(_assertThisInitialized(_this));
+    _this.onFileChange = _this.onFileChange.bind(_assertThisInitialized(_this));
     _this.onSubmit = _this.onSubmit.bind(_assertThisInitialized(_this));
     _this.onUpdate = _this.onUpdate.bind(_assertThisInitialized(_this));
     _this.closeRef = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
@@ -78117,7 +78203,7 @@ function (_Component) {
     value: function fetchData() {
       var _this2 = this;
 
-      _api__WEBPACK_IMPORTED_MODULE_4__["default"].get('products').then(function (res) {
+      _api__WEBPACK_IMPORTED_MODULE_5__["default"].get('products').then(function (res) {
         var _res$data = res.data,
             data = _res$data.data,
             success = _res$data.success;
@@ -78128,6 +78214,35 @@ function (_Component) {
           });
         }
       })["catch"](console.log);
+      _api__WEBPACK_IMPORTED_MODULE_5__["default"].get('categories').then(function (res) {
+        var _res$data2 = res.data,
+            success = _res$data2.success,
+            data = _res$data2.data;
+
+        if (success) {
+          _this2.setState({
+            categories: data.map(function (c) {
+              return {
+                label: c.name,
+                value: c.id
+              };
+            })
+          });
+        }
+      })["catch"](console.log);
+    }
+  }, {
+    key: "resetFormData",
+    value: function resetFormData() {
+      this.setState({
+        formData: {
+          name: '',
+          description: '',
+          file: '',
+          categories: []
+        },
+        editId: null
+      });
     }
   }, {
     key: "onFormChange",
@@ -78137,72 +78252,107 @@ function (_Component) {
       });
     }
   }, {
-    key: "onSubmit",
-    value: function onSubmit(e) {
+    key: "onFileChange",
+    value: function onFileChange(e) {
+      this.setState({
+        formData: _objectSpread({}, this.state.formData, {
+          file: e.target.files[0]
+        })
+      });
+    }
+  }, {
+    key: "onFilterChange",
+    value: function onFilterChange(e) {
       var _this3 = this;
 
+      this.setState({
+        filterData: _objectSpread({}, this.state.filterData, _defineProperty({}, e.target.name, e.target.value))
+      }, function () {
+        var data = _objectSpread({}, _this3.state.filterData);
+
+        _api__WEBPACK_IMPORTED_MODULE_5__["default"].get("products?filter=".concat(JSON.stringify(data))).then(function (res) {
+          var _res$data3 = res.data,
+              data = _res$data3.data,
+              success = _res$data3.success;
+
+          if (success) {
+            _this3.setState({
+              data: data
+            });
+          }
+        })["catch"](console.log);
+      });
+    }
+  }, {
+    key: "onSubmit",
+    value: function onSubmit(e) {
+      var _this4 = this;
+
       var formData = this.state.formData;
+      var fData = new FormData();
       e.preventDefault();
-      _api__WEBPACK_IMPORTED_MODULE_4__["default"].post('products', formData).then(function (res) {
+      Object.keys(formData).map(function (k) {
+        fData.append(k, formData[k]);
+      });
+      _api__WEBPACK_IMPORTED_MODULE_5__["default"].post('products', fData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (res) {
         var success = res.data.success;
 
         if (success) {
-          _this3.fetchData();
+          _this4.fetchData();
 
-          _this3.setState({
-            formData: {
-              name: '',
-              description: '',
-              categories: []
-            }
-          });
+          _this4.resetFormData();
 
-          _this3.closeRef.current.click();
+          _this4.closeRef.current.click();
         }
       })["catch"](console.log);
     }
   }, {
     key: "onUpdate",
     value: function onUpdate(e) {
-      var _this4 = this;
+      var _this5 = this;
 
       var _this$state = this.state,
           formData = _this$state.formData,
           editId = _this$state.editId;
+      var fData = new FormData();
       e.preventDefault();
 
       var tmpData = _objectSpread({}, formData);
 
       delete tmpData.categoriesEdit;
-      _api__WEBPACK_IMPORTED_MODULE_4__["default"].put("products/".concat(editId), tmpData).then(function (res) {
+      Object.keys(tmpData).map(function (k) {
+        fData.append(k, tmpData[k]);
+      });
+      _api__WEBPACK_IMPORTED_MODULE_5__["default"].post("products/".concat(editId), fData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (res) {
         var success = res.data.success;
 
         if (success) {
-          _this4.fetchData();
+          _this5.fetchData();
 
-          _this4.setState({
-            formData: {
-              name: '',
-              description: '',
-              categories: []
-            },
-            editId: null
-          });
+          _this5.resetFormData();
 
-          _this4.closeEditRef.current.click();
+          _this5.closeEditRef.current.click();
         }
       })["catch"](console.log);
     }
   }, {
     key: "onDelete",
     value: function onDelete(id) {
-      var _this5 = this;
+      var _this6 = this;
 
-      _api__WEBPACK_IMPORTED_MODULE_4__["default"]["delete"]("products/".concat(id)).then(function (res) {
+      _api__WEBPACK_IMPORTED_MODULE_5__["default"]["delete"]("products/".concat(id)).then(function (res) {
         var success = res.data.success;
 
         if (success) {
-          _this5.fetchData();
+          _this6.fetchData();
         }
       })["catch"](console.log);
     }
@@ -78229,11 +78379,13 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this6 = this;
+      var _this7 = this;
 
       var _this$state2 = this.state,
           data = _this$state2.data,
-          formData = _this$state2.formData;
+          formData = _this$state2.formData,
+          categories = _this$state2.categories,
+          filterData = _this$state2.filterData;
       var _this$props = this.props,
           addNew = _this$props.addNew,
           handle = _this$props.handle;
@@ -78242,12 +78394,21 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row border-bottom border-gray pb-2"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-6"
+        className: "col-3"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", {
         className: "mb-0"
-      }, "Products")), addNew && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Products")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-6 text-right"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CategoryField__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        onChange: this.onFilterChange,
+        data: filterData.categories,
+        categories: categories
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-3 text-right"
+      }, addNew && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: function onClick(e) {
+          return _this7.resetFormData();
+        },
         className: "btn btn-sm btn-primary",
         type: "button",
         "data-toggle": "modal",
@@ -78256,25 +78417,13 @@ function (_Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: d.id,
           className: "media text-white pt-3"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
-          className: "bd-placeholder-img mr-2 rounded",
-          width: "32",
-          height: "32",
-          xmlns: "http://www.w3.org/2000/svg",
-          preserveAspectRatio: "xMidYMid slice",
-          focusable: "false",
-          role: "img",
-          "aria-label": "Placeholder: 32x32"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("title", null, "Placeholder"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("rect", {
-          width: "100%",
-          height: "100%",
-          fill: "#007bff"
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
-          x: "50%",
-          y: "50%",
-          fill: "#007bff",
-          dy: ".3em"
-        }, "32x32")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+          src: "/storage/".concat(d.file),
+          alt: "nopic",
+          width: 32,
+          height: 32,
+          className: "bd-placeholder-img mr-2 rounded"
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "media-body pb-3 mb-0 small lh-125 border-bottom border-gray"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "d-flex justify-content-between align-items-center w-100"
@@ -78286,13 +78435,17 @@ function (_Component) {
           "data-toggle": "modal",
           "data-target": "#editProduct",
           onClick: function onClick(e) {
-            return _this6.onChangeEditData(d);
+            e.preventDefault();
+
+            _this7.onChangeEditData(d);
           }
         }, "Edit"), "\xA0|\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
           href: "#",
           className: "text-danger",
           onClick: function onClick(e) {
-            return _this6.onDelete(d.id);
+            e.preventDefault();
+
+            _this7.onDelete(d.id);
           }
         }, "Delete"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
           className: "d-block"
@@ -78334,8 +78487,10 @@ function (_Component) {
       }, "\xD7"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal-body"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ProductForm__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        onFileChange: this.onFileChange,
         onChange: this.onFormChange,
-        formData: formData
+        formData: formData,
+        categories: categories
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal-footer"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -78374,8 +78529,10 @@ function (_Component) {
       }, "\xD7"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal-body"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ProductForm__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        onFileChange: this.onFileChange,
         onChange: this.onFormChange,
-        formData: formData
+        formData: formData,
+        categories: categories
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal-footer"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -78395,11 +78552,13 @@ function (_Component) {
 
 Products.propTypes = {
   handle: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool,
-  addNew: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool
+  addNew: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool,
+  disableFilter: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool
 };
 Products.defaultProps = {
   handle: false,
-  addNew: false
+  addNew: false,
+  disableFilter: false
 };
 /* harmony default export */ __webpack_exports__["default"] = (Products);
 
@@ -78438,8 +78597,8 @@ module.exports = JSON.parse("[{\"name\":\"Products\",\"path\":\"api/v1/menu/prod
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\JBDSKERIES\keranda\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\JBDSKERIES\keranda\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\laragon\www\keranda\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\laragon\www\keranda\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

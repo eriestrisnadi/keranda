@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import ProductForm from './ProductForm';
+import CategoryField from './CategoryField';
 import api from '../api';
 
 class Products extends Component {
@@ -12,13 +13,20 @@ class Products extends Component {
             formData: {
                 name: '',
                 description: '',
+                file: null,
                 categories: [],
             },
             data: [],
             editId: null,
+            categories: [],
+            filterData: {
+                categories: [],
+            },
         };
 
         this.onFormChange = this.onFormChange.bind(this);
+        this.onFilterChange = this.onFilterChange.bind(this);
+        this.onFileChange = this.onFileChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
         this.closeRef = React.createRef();
@@ -36,6 +44,32 @@ class Products extends Component {
                 this.setState({ data });
             }
         }).catch(console.log);
+
+        api.get('categories').then(res => {
+            const { success, data } = res.data;
+            if (success) {
+                this.setState({
+                    categories: data.map(c => {
+                        return {
+                            label: c.name,
+                            value: c.id,
+                        };
+                    }),
+                });
+            }
+        }).catch(console.log);
+    }
+
+    resetFormData() {
+        this.setState({
+            formData: {
+                name: '',
+                description: '',
+                file: '',
+                categories: [],
+            },
+            editId: null,
+        });
     }
 
     onFormChange(e) {
@@ -47,21 +81,54 @@ class Products extends Component {
         });
     }
 
+    onFileChange(e) {
+        this.setState({
+            formData: {
+                ...this.state.formData,
+                file: e.target.files[0],
+            }
+        });
+    }
+
+    onFilterChange(e) {
+        this.setState({
+            filterData: {
+                ...this.state.filterData,
+                [e.target.name]: e.target.value,
+            }
+        }, () => {
+            const data = {
+                ...this.state.filterData,
+            };
+            api.get(`products?filter=${JSON.stringify(data)}`).then(res => {
+                const { data, success } = res.data;
+                if (success) {
+                    this.setState({
+                        data,
+                    });
+                }
+            }).catch(console.log)
+        });
+    }
+
     onSubmit(e) {
         const { formData } = this.state;
+        const fData = new FormData();
         e.preventDefault();
 
-        api.post('products', formData).then(res => {
+        Object.keys(formData).map(k => {
+            fData.append(k, formData[k]);
+        });
+
+        api.post('products', fData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        }).then(res => {
             const { success } = res.data;
             if (success) {
                 this.fetchData();
-                this.setState({
-                    formData: {
-                        name: '',
-                        description: '',
-                        categories: [],
-                    }
-                });
+                this.resetFormData();
                 this.closeRef.current.click();
             }
         }).catch(console.log);
@@ -69,6 +136,7 @@ class Products extends Component {
 
     onUpdate(e) {
         const { formData, editId } = this.state;
+        const fData = new FormData();
         e.preventDefault();
 
         const tmpData = {
@@ -77,18 +145,19 @@ class Products extends Component {
 
         delete tmpData.categoriesEdit;
 
-        api.put(`products/${editId}`, tmpData).then(res => {
+        Object.keys(tmpData).map(k => {
+            fData.append(k, tmpData[k]);
+        });
+
+        api.post(`products/${editId}`, fData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        }).then(res => {
             const { success } = res.data;
             if (success) {
                 this.fetchData();
-                this.setState({
-                    formData: {
-                        name: '',
-                        description: '',
-                        categories: [],
-                    },
-                    editId: null,
-                });
+                this.resetFormData();
                 this.closeEditRef.current.click();
             }
         }).catch(console.log);
@@ -121,43 +190,46 @@ class Products extends Component {
     }
 
     render() {
-        const { data, formData } = this.state;
+        const { data, formData, categories, filterData } = this.state;
         const { addNew, handle } = this.props;
 
         return (
             <div>
                 <div className="my-3 p-3 bg-dark rounded shadow-sm">
                     <div className="row border-bottom border-gray pb-2">
-                        <div className="col-6">
+                        <div className="col-3">
                             <h6 className="mb-0">Products</h6>
                         </div>
-                        {(addNew) &&
-                            <div className="col-6 text-right">
-                                <button className="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#newProduct">
+                        <div className="col-6 text-right">
+                            <CategoryField onChange={this.onFilterChange} data={filterData.categories} categories={categories} />
+                        </div>
+                        <div className="col-3 text-right">
+                            {(addNew) &&
+                                <button onClick={e => this.resetFormData()} className="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#newProduct">
                                     Add New
                                 </button>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
                     {
                         data.map(d => (
                             <div key={d.id} className="media text-white pt-3">
-                                <svg className="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
+                                <img src={`/storage/${d.file}`} alt="nopic" width={32} height={32} className="bd-placeholder-img mr-2 rounded"></img>
                                 <div className="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                                     <div className="d-flex justify-content-between align-items-center w-100">
                                         <strong className="text-gray-dark">{d.name}</strong>
                                         {
                                             (handle) &&
                                             <span>
-                                                <a href="#" className="text-warning" data-toggle="modal" data-target="#editProduct" onClick={e => this.onChangeEditData(d)}>Edit</a>&nbsp;|&nbsp;
-                                                <a href="#" className="text-danger" onClick={(e) => this.onDelete(d.id)}>Delete</a>
+                                                <a href="#" className="text-warning" data-toggle="modal" data-target="#editProduct" onClick={e => { e.preventDefault(); this.onChangeEditData(d) }}>Edit</a>&nbsp;|&nbsp;
+                                                <a href="#" className="text-danger" onClick={(e) => { e.preventDefault(); this.onDelete(d.id) }}>Delete</a>
                                             </span>
                                         }
                                     </div>
                                     <span className="d-block">{d.description}</span>
                                     {
                                         d.categories.map(c => (
-                                            <span key={c.id}><span className="badge badge-secondary" style={{fontSize: '1em'}}>{c.name}</span>&nbsp;</span>
+                                            <span key={c.id}><span className="badge badge-secondary" style={{ fontSize: '1em' }}>{c.name}</span>&nbsp;</span>
                                         ))
                                     }
                                 </div>
@@ -177,7 +249,7 @@ class Products extends Component {
                                     </button>
                                 </div>
                                 <div className="modal-body">
-                                    <ProductForm onChange={this.onFormChange} formData={formData} />
+                                    <ProductForm onFileChange={this.onFileChange} onChange={this.onFormChange} formData={formData} categories={categories} />
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -199,7 +271,7 @@ class Products extends Component {
                                     </button>
                                 </div>
                                 <div className="modal-body">
-                                    <ProductForm onChange={this.onFormChange} formData={formData} />
+                                    <ProductForm onFileChange={this.onFileChange} onChange={this.onFormChange} formData={formData} categories={categories} />
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -217,11 +289,13 @@ class Products extends Component {
 Products.propTypes = {
     handle: PropTypes.bool,
     addNew: PropTypes.bool,
+    disableFilter: PropTypes.bool,
 };
 
 Products.defaultProps = {
     handle: false,
     addNew: false,
+    disableFilter: false,
 }
 
 export default Products;

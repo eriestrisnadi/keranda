@@ -35,6 +35,15 @@ class Categories extends Component {
         }).catch(console.log);
     }
 
+    resetFormData() {
+        this.setState({
+            formData: {
+                name: '',
+            },
+            editId: null,
+        });
+    }
+
     onFormChange(e) {
         this.setState({
             formData: {
@@ -52,11 +61,7 @@ class Categories extends Component {
             const { success } = res.data;
             if (success) {
                 this.fetchData();
-                this.setState({
-                    formData: {
-                        name: '',
-                    }
-                });
+                this.resetFormData();
                 this.closeRef.current.click();
             }
         }).catch(console.log);
@@ -70,12 +75,7 @@ class Categories extends Component {
             const { success } = res.data;
             if (success) {
                 this.fetchData();
-                this.setState({
-                    formData: {
-                        name: '',
-                    },
-                    editId: null,
-                });
+                this.resetFormData();
                 this.closeEditRef.current.click();
             }
         }).catch(console.log);
@@ -112,7 +112,7 @@ class Categories extends Component {
                         </div>
                         {(addNew) &&
                             <div className="col-6 text-right">
-                                <button className="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#newCategory">
+                                <button onClick={e => this.resetFormData()} className="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#newCategory">
                                     Add New
                                 </button>
                             </div>
@@ -127,8 +127,8 @@ class Categories extends Component {
                                         {
                                             (handle) &&
                                             <span>
-                                                <a href="#" className="text-warning" data-toggle="modal" data-target="#editCategory" onClick={e => this.onChangeEditData(d)}>Edit</a>&nbsp;|&nbsp;
-                                                <a href="#" className="text-danger" onClick={(e) => this.onDelete(d.id)}>Delete</a>
+                                                <a href="#" className="text-warning" data-toggle="modal" data-target="#editCategory" onClick={e => {e.preventDefault();this.onChangeEditData(d)}}>Edit</a>&nbsp;|&nbsp;
+                                                <a href="#" className="text-danger" onClick={(e) => {e.preventDefault();this.onDelete(d.id)}}>Delete</a>
                                             </span>
                                         }
                                     </div>

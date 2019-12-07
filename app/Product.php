@@ -10,7 +10,7 @@ class Product extends Model
 {
     use HasUlid;
 
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'file'];
 
     public function categories()
     {
